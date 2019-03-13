@@ -1,0 +1,17 @@
+{
+  "event": {
+    "commonEventHeader": {
+      "sourceName":"Vendor-Equip_Model-SN1234"
+    },
+    "stateChangeFields": {
+      "stateChangeFieldsVersion": 1,
+      "newState": "inService",
+      "oldState": "outOfService",
+      "stateInterface": "",
+      "additionalFields": {
+          "macAddress": "",
+          "swVersion": ""
+      }
+    }
+  }
+}
