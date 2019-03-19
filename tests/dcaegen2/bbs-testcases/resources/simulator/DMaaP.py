@@ -3,28 +3,34 @@ import time
 from http.server import BaseHTTPRequestHandler
 import httpServerLib
 
+
 posted_event_from_bbs = b'Empty'
 received_event_to_get_method = b'Empty'
 
 
 class DmaapSetup(BaseHTTPRequestHandler):
 
+    """
+    This Handler is used by the test harness to prepare the buffers:
+        test harness places VES events using PUT from the harness into the 
+        "received_event buffer"
+        test harness will write policy topics from the BBS us to the posted event buffer
+    """
     def do_PUT(self):
+        # Read the event from the test harness place it in the received event buffer
         if re.search('/set_get_event', self.path):
-            global received_event_to_get_method
             content_length = int(self.headers['Content-Length'])
+            global received_event_to_get_method
             received_event_to_get_method = self.rfile.read(content_length)
             httpServerLib.header_200_and_json(self)
 
         return
 
     def do_GET(self):
-        # Get the CPE Authentication Policy trigger
-        if re.search('/events/pnfReady', self.path):
-            httpServerLib.header_200_and_json(self)
-            self.wfile.write(posted_event_from_bbs)
-        # Get the PNF Update Policy trigger
-        elif re.search('/events/pnfReady', self.path):
+        # The test harness receives the policy triggers from the posted event
+        # by issuing a get and receiving the response.
+        if re.search('/events/dcaeClOutput', self.path):
+            global posted_event_from_bbs
             httpServerLib.header_200_and_json(self)
             self.wfile.write(posted_event_from_bbs)
 
@@ -42,16 +48,17 @@ class DmaapSetup(BaseHTTPRequestHandler):
 
 
 class DMaaPHandler(BaseHTTPRequestHandler):
+    """
+    This Handler is what the BBS uS connects to - The test library has posted the
+    the VES events in the setup Handler which are then received by the BBS uS via
+    this handler's do_GET function.
+    Likewise the policy trigger posted by the BBS uS is received and placed in the
+     in the posted event buffer which the test harness retrieves using the setup handler.
+    """
 
     def do_POST(self):
-        # Post the CPE Authentication Policy trigger
-        if re.search('/events/unauthenticated.PNF_READY', self.path):
-            global posted_event_from_bbs
-            content_length = int(self.headers['Content-Length'])
-            posted_event_from_bbs = self.rfile.read(content_length)
-            httpServerLib.header_200_and_json(self)
-        # Post the PNF Update Policy trigger
-        elif re.search('/events/unauthenticated.PNF_READY', self.path):
+        # Post of the policy triggers from the BBS uS
+        if re.search('/events/unauthenticated.DCAE_CL_OUTPUT', self.path):
             global posted_event_from_bbs
             content_length = int(self.headers['Content-Length'])
             posted_event_from_bbs = self.rfile.read(content_length)
@@ -60,12 +67,12 @@ class DMaaPHandler(BaseHTTPRequestHandler):
         return
 
     def do_GET(self):
-        # Get the CPE Authentication event
-        if re.search('/events/unauthenticated.VES_PNFREG_OUTPUT/OpenDcae-c12/c12', self.path):
+        # BBS uS issues a Get to receive VES and PNF UPdate event from DMAAP
+        global received_event_to_get_method
+        if re.search('/events/unauthenticated.PNF_UPDATE', self.path):
             httpServerLib.header_200_and_json(self)
             self.wfile.write(received_event_to_get_method)
-        # Get the PNF Update event
-        elif re.search('/events/unauthenticated.VES_PNFREG_OUTPUT/OpenDcae-c12/c12', self.path):
+        elif re.search('/events/unauthenticated_CPE_AUTHENTICATION/OpenDcae-c12/c12', self.path):
             httpServerLib.header_200_and_json(self)
             self.wfile.write(received_event_to_get_method)
 

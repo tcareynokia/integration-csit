@@ -40,7 +40,8 @@ Valid auth event processing
 
 Check auth policy
     [Arguments]    ${posted_event_to_dmaap}
-    ${resp}=    Get Request    ${dmaap_setup_session}    /events/pnfReady    headers=${suite_headers}
+    Set Test Variable    ${resp}    no_resp
+    ${resp}=    Get Request    ${dmaap_setup_session}    /events/dcaeClOutput   headers=${suite_headers}
     Should Be Equal    ${resp.text}    ${posted_event_to_dmaap}
  
 Invalid update event processing
@@ -48,9 +49,9 @@ Invalid update event processing
     [Timeout]    30s
     ${data}=    Get Data From File    ${input_invalid_event_in_dmaap}
     Set event in DMaaP    ${data}
-    ${invalid_notification}=    Create invalid notification    ${data}
-    ${notification}=    Catenate    SEPARATOR= \\n    |Incorrect json, consumerDmaapModel can not be created:     ${invalid_notification}
-    Wait Until Keyword Succeeds    100x    100ms    Check BBS log    ${notification}
+    ${invalid_policy}=    Create invalid update policy    ${data}
+    ${err_msg}=    Catenate    SEPARATOR= \\n    |Incorrect json, consumerDmaapModel can not be created:     ${invalid_policy}
+    Wait Until Keyword Succeeds    100x    100ms    Check BBS log    ${err_msg}
 
 Valid update event processing
     [Arguments]    ${input_valid_event_in_dmaap}
@@ -64,7 +65,7 @@ Valid update event processing
 
 Check update policy
     [Arguments]    ${posted_event_to_dmaap}
-    ${resp}=    Get Request    ${dmaap_setup_session}    /events/pnfReady    headers=${suite_headers}
+    ${resp}=    Get Request    ${dmaap_setup_session}    /events/dcaeClOutput   headers=${suite_headers}
     Should Be Equal    ${resp.text}    ${posted_event_to_dmaap}
 
 Check BBS log

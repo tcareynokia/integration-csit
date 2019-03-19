@@ -1,79 +1,40 @@
 version: '3'
 services:
-  prh:
-    image: nexus3.onap.org:10001/onap/org.onap.dcaegen2.services.bbs.bbs-app-server:1.2.0
+  bbs:
+    image: registry.gitlab.com/onap-bbs/onap-bbs-docker-images/bbs-event-processor 
     command: >
-        --dmaap.dmaapConsumerConfiguration.dmaapHostName=dmaap-bc
+        --dmaap.dmaapConsumerConfiguration.dmaapHostName=10.0.2.15
         --dmaap.dmaapConsumerConfiguration.dmaapPortNumber=2222
-        --dmaap.dmaapProducerConfiguration.dmaapHostName=dmaap-bc
+        --dmaap.dmaapProducerConfiguration.dmaapHostName=10.0.2.15
         --dmaap.dmaapProducerConfiguration.dmaapPortNumber=2222
         --aai.aaiClientConfiguration.aaiHostPortNumber=3333
-        --aai.aaiClientConfiguration.aaiHost=aai
+        --aai.aaiClientConfiguration.aaiHost=10.0.2.15
         --aai.aaiClientConfiguration.aaiProtocol=http
-    entrypoint:
-      - java
-      - -Dspring.profiles.active=dev
-      - -Dlogging.level.org.onap.dcaegen2.services.bbs=TRACE
-      - -jar
-      - /opt/prh-app-server.jar
     ports:
-      - "8100:8100"
-      - "8433:8433"
-    container_name: bbs
-    depends_on:
-     - dmaap-bc
-     - aai
-
-  ssl_prh:
-      image: nexus3.onap.org:10001/onap/org.onap.dcaegen2.services.bbs.bbs-app-server:1.2.0
-      command: >
-          --dmaap.dmaapConsumerConfiguration.dmaapHostName=dmaap-bc
-          --dmaap.dmaapConsumerConfiguration.dmaapPortNumber=2223
-          --dmaap.dmaapConsumerConfiguration.dmaapProtocol=https
-          --dmaap.dmaapProducerConfiguration.dmaapHostName=dmaap-bc
-          --dmaap.dmaapProducerConfiguration.dmaapPortNumber=2223
-          --dmaap.dmaapProducerConfiguration.dmaapProtocol=https
-          --aai.aaiClientConfiguration.aaiHostPortNumber=3334
-          --aai.aaiClientConfiguration.aaiHost=aai
-          --aai.aaiClientConfiguration.aaiProtocol=https
-          --security.enableAaiCertAuth=true
-          --security.enableDmaapCertAuth=true
-          --security.keyStorePath=/tmp/certs/org.onap.dcae.jks
-          --security.keyStorePasswordPath=/tmp/certs/keystore.password
-          --security.trustStorePath=/tmp/certs/org.onap.dcae.trust.jks
-          --security.trustStorePasswordPath=/tmp/certs/truststore.password
-      entrypoint:
-        - java
-        - -Dspring.profiles.active=dev
-        - -Dlogging.level.org.onap.dcaegen2.services.bbs=TRACE
-        - -jar
-        - /opt/bbs-app-server.jar
-      ports:
-        - "8200:8100"
-        - "8533:8433"
-      volumes:
-        - ./simulator/certs:/tmp/certs
-      container_name: ssl_bbs
-      depends_on:
-       - dmaap-bc
-       - aai
-
-  dmaap-bc:
-    build:
-      context: simulator
-      dockerfile: DMaaP_simulator
-    ports:
-      - "2222:2222"
-      - "2223:2223"
-      - "2224:2224"
-    container_name: dmaap_simulator
-
-  aai:
-     build:
-       context: simulator
-       dockerfile: AAI_simulator
-     ports:
-      - "3333:3333"
-      - "3334:3334"
-      - "3335:3335"
-     container_name: aai_simulator
+      - "32100:8100"
+    environment:
+      CONFIGS_DMAAP_CONSUMER_RE-REGISTRATION_DMAAPHOSTNAME: 10.0.2.15
+      CONFIGS_DMAAP_CONSUMER_RE-REGISTRATION_DMAAPPORTNUMBER: 2222
+      CONFIGS_DMAAP_CONSUMER_RE-REGISTRATION_DMAAPTOPICNAME: /events/unauthenticated_PNF_UPDATE
+      CONFIGS_DMAAP_CONSUMER_RE-REGISTRATION_CONSUMERGROUP: 
+      CONFIGS_DMAAP_CONSUMER_RE-REGISTRATION_CONSUMERID: 
+      CONFIGS_DMAAP_CONSUMER_CPE-AUTHENTICATION_DMAAPHOSTNAME: 10.0.2.15
+      CONFIGS_DMAAP_CONSUMER_CPE-AUTHENTICATION_DMAAPPORTNUMBER: 2222
+      CONFIGS_DMAAP_CONSUMER_CPE-AUTHENTICATION_DMAAPTOPICNAME: /events/unauthenticated_CPE_AUTHENTICATION
+      CONFIGS_DMAAP_CONSUMER_CPE-AUTHENTICATION_CONSUMERGROUP:
+      CONFIGS_DMAAP_CONSUMER_CPE-AUTHENTICATION_CONSUMERID:
+      CONFIGS_DMAAP_PRODUCER_DMAAPHOSTNAME: 10.0.2.15
+      CONFIGS_DMAAP_PRODUCER_DMAAPPORTNUMBER: 2222
+      CONFIGS_DMAAP_PRODUCER_DMAAPTOPICNAME: /events/unauthenticated_DCAE_CL_OUTPUT
+      CONFIGS_AAI_CLIENT_AAIHOST: 10.0.2.15
+      CONFIGS_AAI_CLIENT_AAIPORT: 3333
+      CONFIGS_APPLICATION_SCHEDULINGPERIODSEC: 3
+      CONFIGS_APPLICATION_DMAAPTIMEOUTSEC: 150
+      CONFIGS_APPLICATION_AAITIMEOUTSEC: 150
+      CONFIGS_APPLICATION_RE-REGISTRATION_POLICYSCOPE: "re-reg_policy_scope"
+      CONFIGS_APPLICATION_RE-REGISTRATION_CLCONTROLNAME: "re-reg_cl"
+      CONFIGS_APPLICATION_CPE-AUTHENTICATION_POLICYSCOPE: "cpe-auth_policy_scope"
+      CONFIGS_APPLICATION_CPE-AUTHENTICATION_CLCONTROLNAME: "cpe-auth_cl"
+      LOGGING_LEVEL_ORG_ONAP_BBS: TRACE
+    container_name: bbs-event-processor
+    network_mode: bridge

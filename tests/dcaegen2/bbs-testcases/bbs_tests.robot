@@ -2,12 +2,12 @@
 Documentation     Integration tests for BBS.
 ...               BBS receives CPE_AUTHENTICATION event from DMaaP and triggers a Policy that updates the CFS service with the PNF.
 ...               BBS receives PNF_UPDATE event from DMaaP and triggers a Policy that updates the CFS service resources associated with the PNF.
-Suite Setup       Run keywords   Create header  AND  Create sessions  AND  Ensure Container Is Running  bbs  AND  Ensure Container Is Exited  ssl_bbs
-Suite Teardown    Ensure Container Is Running  ssl_bbs
-Test Teardown     Reset Simulators
-Library           resources/BbsLibrary.py
+Library           BbsLibrary
 Resource          resources/bbs_library.robot
 Resource          ../../common.robot
+Suite Setup       Run keywords   Create header  AND  Create sessions  AND  Ensure Container Is Running  bbs-event-processor 
+Test Teardown     Reset Simulators
+
 
 *** Variables ***
 ${DMAAP_SIMULATOR_SETUP_URL}    http://${DMAAP_SIMULATOR_SETUP}
@@ -19,7 +19,7 @@ ${AUTH_EVENT_WITH_MISSING_STATE}    %{WORKSPACE}/tests/dcaegen2/bbs-testcases/as
 ${AUTH_EVENT_WITH_MISSING_SOURCENAME}    %{WORKSPACE}/tests/dcaegen2/bbs-testcases/assets/json_events/auth_event_with_missing_sourceName.json
 ${AUTH_NOT_JSON_FORMAT}    %{WORKSPACE}/tests/dcaegen2/bbs-testcases/assets/json_events/auth_not_json_format.json
 ${UPDATE_EVENT_WITH_ALL_VALID_REQUIRED_FIELDS}    %{WORKSPACE}/tests/dcaegen2/bbs-testcases/assets/json_events/update_event_with_all_fields.json
-${UPDATE_EVENT_WITH_MISSING_ATTACHMENT}    %{WORKSPACE}/tests/dcaegen2/bbs-testcases/assets/json_events/pdate_event_with_missing_attachment.json
+${UPDATE_EVENT_WITH_MISSING_ATTACHMENT}    %{WORKSPACE}/tests/dcaegen2/bbs-testcases/assets/json_events/update_event_with_missing_attachment.json
 ${UPDATE_EVENT_WITH_MISSING_CORRELATION}    %{WORKSPACE}/tests/dcaegen2/bbs-testcases/assets/json_events/update_event_with_missing_correlation.json
 ${UPDATE_NOT_JSON_FORMAT}    %{WORKSPACE}/tests/dcaegen2/bbs-testcases/assets/json_events/update_not_json_format.json
 

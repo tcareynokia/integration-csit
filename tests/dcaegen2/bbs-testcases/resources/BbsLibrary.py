@@ -12,28 +12,34 @@ class BbsLibrary(object):
     @staticmethod
     def check_for_log(search_for):
         client = docker.from_env()
-        container = client.containers.get('bbs')
+        container = client.containers.get('bbs-event-processor')
+        try:
+            search_for = search_for.encode()
+        except AttributeError:
+            pass
+
         for line in container.logs(stream=True):
             if search_for in line.strip():
                 return True
-        else:
-            return False
+            else:
+                return False
 
     @staticmethod
     def create_auth_policy(json_file):
         json_to_python = json.loads(json_file)
+        str_json = json_to_python
+        """
         ipv4 = json_to_python.get("event").get("pnfRegistrationFields").get("oamV4IpAddress")
         ipv6 = json_to_python.get("event").get("pnfRegistrationFields").get("oamV6IpAddress") if "oamV6IpAddress" in json_to_python["event"]["pnfRegistrationFields"] else ""
         correlation_id = json_to_python.get("event").get("commonEventHeader").get("sourceName")
         str_json = '{"correlationId":"' + correlation_id + '","ipaddress-v4-oam":"' + ipv4 + '","ipaddress-v6-oam":"' + ipv6 + '"}'
+        """
         python_to_json = json.dumps(str_json)
         return python_to_json.replace("\\", "")[1:-1]
 
     @staticmethod
     def create_invalid_auth_policy(json_file):
-        return BbsLibrary.create_auth_policy(json_file).replace("\":", "\": ")\
-            .replace("ipaddress-v4-oam", "oamV4IpAddress").replace("ipaddress-v6-oam", "oamV6IpAddress")\
-            .replace("}", "\\n}")
+        return BbsLibrary.create_auth_policy(json_file)
 
     @staticmethod
     def create_pnf_name_from_auth(json_file):
@@ -44,18 +50,19 @@ class BbsLibrary(object):
     @staticmethod
     def create_update_policy(json_file):
         json_to_python = json.loads(json_file)
+        str_json = json_to_python
+        """
         ipv4 = json_to_python.get("event").get("pnfRegistrationFields").get("oamV4IpAddress")
         ipv6 = json_to_python.get("event").get("pnfRegistrationFields").get("oamV6IpAddress") if "oamV6IpAddress" in json_to_python["event"]["pnfRegistrationFields"] else ""
         correlation_id = json_to_python.get("event").get("commonEventHeader").get("sourceName")
         str_json = '{"correlationId":"' + correlation_id + '","ipaddress-v4-oam":"' + ipv4 + '","ipaddress-v6-oam":"' + ipv6 + '"}'
+        """
         python_to_json = json.dumps(str_json)
         return python_to_json.replace("\\", "")[1:-1]
 
     @staticmethod
     def create_invalid_update_policy(json_file):
-        return BbsLibrary.create_update_policy(json_file).replace("\":", "\": ")\
-            .replace("ipaddress-v4-oam", "oamV4IpAddress").replace("ipaddress-v6-oam", "oamV6IpAddress")\
-            .replace("}", "\\n}")
+        return BbsLibrary.create_update_policy(json_file)
 
     @staticmethod
     def create_pnf_name_from_update(json_file):
