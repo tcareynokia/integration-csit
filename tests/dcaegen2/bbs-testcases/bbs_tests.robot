@@ -63,7 +63,7 @@ Get valid CPE_AUTHENTICATION event from DMaaP and AAI is not responding
     ${data}=    Get Data From File    ${AUTH_EVENT_WITH_ALL_VALID_REQUIRED_FIELDS}
     Ensure Container Is Exited   aai_simulator
     Set event in DMaaP    ${data}
-    Wait Until Keyword Succeeds    100x    300ms    Check BBS log    java.net.UnknownHostException: aai
+    Wait Until Keyword Succeeds    100x    300ms    Check BBS log    java.net.UnknownHostException: aai_imulator
     Ensure Container Is Running  aai_simulator
     
 Valid DMaaP PNF_UPDATE event can trigger Policy

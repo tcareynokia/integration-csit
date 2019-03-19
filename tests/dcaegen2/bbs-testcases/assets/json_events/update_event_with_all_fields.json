@@ -11,5 +11,5 @@
      "cvlan": "1005",
      "svlan": "100",
      "remoteId": "some-remote-id"
-  }
+   }
  }

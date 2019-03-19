@@ -13,16 +13,18 @@ class BbsLibrary(object):
     def check_for_log(search_for):
         client = docker.from_env()
         container = client.containers.get('bbs-event-processor')
+
+        alog = container.logs(stream=False)
         try:
-            search_for = search_for.encode()
+            alog = alog.decode()
         except AttributeError:
             pass
 
-        for line in container.logs(stream=True):
-            if search_for in line.strip():
-                return True
-            else:
-                return False
+        found = alog.find(search_for)
+        if found != -1:
+            return True
+        else:
+            return False
 
     @staticmethod
     def create_auth_policy(json_file):
@@ -44,7 +46,7 @@ class BbsLibrary(object):
     @staticmethod
     def create_pnf_name_from_auth(json_file):
         json_to_python = json.loads(json_file)
-        correlation_id = json_to_python.get("sourceName")
+        correlation_id = json_to_python.get("event").get("commonEventHeader").get("sourceName")
         return correlation_id
 
     @staticmethod

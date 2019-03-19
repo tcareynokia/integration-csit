@@ -40,8 +40,7 @@ Valid auth event processing
 
 Check auth policy
     [Arguments]    ${posted_event_to_dmaap}
-    Set Test Variable    ${resp}    no_resp
-    ${resp}=    Get Request    ${dmaap_setup_session}    /events/dcaeClOutput   headers=${suite_headers}
+    ${resp} =    Get Request    ${dmaap_setup_session}    /events/dcaeClOutput   headers=${suite_headers}
     Should Be Equal    ${resp.text}    ${posted_event_to_dmaap}
  
 Invalid update event processing
@@ -65,7 +64,7 @@ Valid update event processing
 
 Check update policy
     [Arguments]    ${posted_event_to_dmaap}
-    ${resp}=    Get Request    ${dmaap_setup_session}    /events/dcaeClOutput   headers=${suite_headers}
+    ${resp} =    Get Request    ${dmaap_setup_session}    /events/dcaeClOutput   headers=${suite_headers}
     Should Be Equal    ${resp.text}    ${posted_event_to_dmaap}
 
 Check BBS log
@@ -76,16 +75,16 @@ Check BBS log
 Set PNF name in AAI
     [Arguments]    ${pnfs_name}
     ${headers}=    Create Dictionary    Accept=application/json    Content-Type=text/html
-    ${resp}=    Put Request    ${aai_setup_session}    /set_pnfs    headers=${headers}    data=${pnfs_name}
+    ${resp} =    Put Request    ${aai_setup_session}    /set_pnfs    headers=${headers}    data=${pnfs_name}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 Set event in DMaaP
     [Arguments]    ${event_in_dmaap}
-    ${resp}=    Put Request    ${dmaap_setup_session}    /set_get_event    headers=${suite_headers}    data=${event_in_dmaap}
+    ${resp} =    Put Request    ${dmaap_setup_session}    /set_get_event    headers=${suite_headers}    data=${event_in_dmaap}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 Reset AAI simulator
-    ${resp}=    Post Request     ${aai_setup_session}    /reset
+    ${resp} =    Post Request     ${aai_setup_session}    /reset
     Should Be Equal As Strings    ${resp.status_code}    200
 
 Reset DMaaP simulator
