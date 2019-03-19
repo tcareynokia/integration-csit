@@ -24,7 +24,7 @@ bypass_ip_adress ${SSL_BBS_IP}
 bypass_ip_adress ${DMAAP_SIMULATOR_IP}
 bypass_ip_adress ${AAI_SIMULATOR_IP}
 
-echo BBS_IP=${PRH_IP}
+echo BBS_IP=${BBS_IP}
 echo SSL_BBS_IP=${SSL_BBS_IP}
 echo DMAAP_SIMULATOR_IP=${DMAAP_SIMULATOR_IP}
 echo AAI_SIMULATOR_IP=${AAI_SIMULATOR_IP}
