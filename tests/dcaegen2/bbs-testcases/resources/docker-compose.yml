@@ -1,7 +1,7 @@
 version: '3'
 services:
   bbs:
-    image: registry.gitlab.com/onap-bbs/onap-bbs-docker-images/bbs-event-processor 
+    image: registry.gitlab.com/onap-bbs/onap-bbs-docker-images/bbs-ep-component:1.0.0-SNAPSHOT
     command: >
         --dmaap.dmaapConsumerConfiguration.dmaapHostName=10.0.2.15
         --dmaap.dmaapConsumerConfiguration.dmaapPortNumber=2222
@@ -28,9 +28,9 @@ services:
       CONFIGS_DMAAP_PRODUCER_DMAAPTOPICNAME: /events/unauthenticated_DCAE_CL_OUTPUT
       CONFIGS_AAI_CLIENT_AAIHOST: 10.0.2.15
       CONFIGS_AAI_CLIENT_AAIPORT: 3333
-      CONFIGS_APPLICATION_SCHEDULINGPERIODSEC: 3
-      CONFIGS_APPLICATION_DMAAPTIMEOUTSEC: 150
-      CONFIGS_APPLICATION_AAITIMEOUTSEC: 150
+      CONFIGS_AAI_CLIENT_AAIPROTOCOL: http
+      CONFIGS_APPLICATION_PIPELINESPOLLINGINTERVALSEC: 20
+      CONFIGS_APPLICATION_PIPELINESTIMEOUTSEC: 15
       CONFIGS_APPLICATION_RE-REGISTRATION_POLICYSCOPE: "re-reg_policy_scope"
       CONFIGS_APPLICATION_RE-REGISTRATION_CLCONTROLNAME: "re-reg_cl"
       CONFIGS_APPLICATION_CPE-AUTHENTICATION_POLICYSCOPE: "cpe-auth_policy_scope"

@@ -29,7 +29,8 @@ class AAISetup(BaseHTTPRequestHandler):
 class AAIHandler(BaseHTTPRequestHandler):
 
     def do_PATCH(self):
-        pnfs_name = '/aai/v12/network/pnfs/pnf/' + pnfs.decode()
+        global pnfs
+        pnfs_name = '/aai/v14/network/pnfs/pnf/' + pnfs.decode()
         if re.search('wrong_aai_record', self.path):
             self.send_response(400)
             self.end_headers()
@@ -39,6 +40,22 @@ class AAIHandler(BaseHTTPRequestHandler):
             
         return
 
+    def do_GET(self):
+        global pnfs
+        pnfs_name = '/aai/v14/network/pnfs/pnf/'
+        try:
+            pnfs_name = pnfs_name + pnfs.decode()
+        except AttributeError:
+            pass
+
+        if re.search(pnfs_name, self.path):
+            self.send_response(200)
+            self.end_headers()
+        else:
+            send_response(204)
+            self.end_headers()
+            
+        return
 
 def _main_(handler_class=AAIHandler, protocol="HTTP/1.0"):
     handler_class.protocol_version = protocol
