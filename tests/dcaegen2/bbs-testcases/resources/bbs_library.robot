@@ -41,8 +41,9 @@ Valid auth event processing
 Check policy
     [Arguments]    ${json_policy_file}
     ${resp}=    Get Request    ${dmaap_setup_session}    /events/dcaeClOutput   headers=${suite_headers}
-    ${result}= Compare policy ${resp.text} ${json_policy_file}
-    Should Be Equal    ${result} True
+    ${data}=    Get Data From File    ${json_policy_file}
+    ${result}=    Compare policy    ${resp.text}    ${data}
+    Should Be Equal As Strings    ${result}    True
  
 Invalid update event processing
     [Arguments]    ${input_invalid_event_in_dmaap}

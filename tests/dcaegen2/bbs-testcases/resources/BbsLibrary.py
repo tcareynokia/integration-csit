@@ -52,10 +52,29 @@ class BbsLibrary(object):
     @staticmethod
     def compare_policy(dmaap_policy, json_policy):
         resp = False
-        python_policy = json.loads(json_policy)
-        python_dmaap_policy = json.loads(dmaap_policy)
-        d_policy = python_dmaap_policy.get("policyName")
-        resp = d_policy == python_policy.get("policyName")
+        try:
+            python_policy = json.loads(json_policy).pop()
+        except:
+            python_policy = ""
+        
+        try:
+            python_dmaap_policy = json.loads(dmaap_policy).pop()
+        except:
+            python_dmaap_policy = ""
+
+        try:
+            d_policy = python_dmaap_policy.get("policyName")
+        except:
+            d_policy = ""
+
+        try:
+            j_policy = python_policy.get("policyName")
+        except:
+            return "False"
+        
+        resp = "False"
+        if (d_policy == j_policy):
+            resp = "True"
         return resp
 
     @staticmethod

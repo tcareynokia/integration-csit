@@ -28,7 +28,7 @@ ${UPDATE_POLICY}    %{WORKSPACE}/tests/dcaegen2/bbs-testcases/assets/json_events
 *** Test Cases ***
 Valid DMaaP CPE_AUTHENTICATION event can trigger Policy
     [Documentation]    BBS get valid CPE_AUTHENTICATION event from DMaaP with required fields - BBS triggers Policy
-    [Tags]    BBS    Valid CPE_AUTHENTICATION event
+    [Tags]    BBS    Valid CPE_AUTHENTICATION event    test
     [Template]    Valid auth event processing
     ${AUTH_EVENT_WITH_ALL_VALID_REQUIRED_FIELDS}
     ${AUTH_EVENT_WITHOUT_SWVERSION}
@@ -70,7 +70,7 @@ Get valid CPE_AUTHENTICATION event from DMaaP and AAI is not responding
     
 Valid DMaaP PNF_UPDATE event can trigger Policy
     [Documentation]    BBS get valid PNF_UPDATE event from DMaaP with required fields - BBS triggers Policy
-    [Tags]    BBS    Valid PNF_UPDATE event
+    [Tags]    BBS    Valid PNF_UPDATE event    test
     [Template]    Valid update event processing
     ${UPDATE_EVENT_WITH_ALL_VALID_REQUIRED_FIELDS}
 
