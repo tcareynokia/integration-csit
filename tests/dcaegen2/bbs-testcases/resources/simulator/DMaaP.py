@@ -4,8 +4,8 @@ from http.server import BaseHTTPRequestHandler
 import httpServerLib
 
 
-posted_event_from_bbs = b'Empty'
-received_event_to_get_method = b'Empty'
+posted_event_from_bbs = b'[]'
+received_event_to_get_method = b'[]'
 
 
 class DmaapSetup(BaseHTTPRequestHandler):
@@ -40,8 +40,8 @@ class DmaapSetup(BaseHTTPRequestHandler):
         if re.search('/reset', self.path):
             global posted_event_from_bbs
             global received_event_to_get_method
-            posted_event_from_bbs = b'Empty'
-            received_event_to_get_method = b'Empty'
+            posted_event_from_bbs = b'[]'
+            received_event_to_get_method = b'[]'
             httpServerLib.header_200_and_json(self)
 
         return

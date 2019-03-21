@@ -50,6 +50,15 @@ class BbsLibrary(object):
         return correlation_id
 
     @staticmethod
+    def compare_policy(dmaap_policy, json_policy):
+        resp = False
+        python_policy = json.loads(json_policy)
+        python_dmaap_policy = json.loads(dmaap_policy)
+        d_policy = python_dmaap_policy.get("policyName")
+        resp = d_policy == python_policy.get("policyName")
+        return resp
+
+    @staticmethod
     def create_update_policy(json_file):
         json_to_python = json.loads(json_file)
         str_json = json_to_python

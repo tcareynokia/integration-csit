@@ -36,12 +36,13 @@ Valid auth event processing
     ${pnf_name}=    Create PNF name from auth    ${data}
     Set PNF name in AAI    ${pnf_name}
     Set event in DMaaP    ${data}
-    Wait Until Keyword Succeeds    100x    300ms    Check auth policy    ${posted_event_to_dmaap}
+    Wait Until Keyword Succeeds    100x    300ms    Check policy    ${AUTH_POLICY}
 
-Check auth policy
-    [Arguments]    ${posted_event_to_dmaap}
-    ${resp} =    Get Request    ${dmaap_setup_session}    /events/dcaeClOutput   headers=${suite_headers}
-    Should Be Equal    ${resp.text}    ${posted_event_to_dmaap}
+Check policy
+    [Arguments]    ${json_policy_file}
+    ${resp}=    Get Request    ${dmaap_setup_session}    /events/dcaeClOutput   headers=${suite_headers}
+    ${result}= Compare policy ${resp.text} ${json_policy_file}
+    Should Be Equal    ${result} True
  
 Invalid update event processing
     [Arguments]    ${input_invalid_event_in_dmaap}
@@ -60,12 +61,8 @@ Valid update event processing
     ${pnf_name}=    Create PNF name from update    ${data}
     Set PNF name in AAI    ${pnf_name}
     Set event in DMaaP    ${data}
-    Wait Until Keyword Succeeds    100x    300ms    Check update policy    ${posted_event_to_dmaap}
+    Wait Until Keyword Succeeds    100x    300ms    Check policy     ${AUTH_POLICY}
 
-Check update policy
-    [Arguments]    ${posted_event_to_dmaap}
-    ${resp} =    Get Request    ${dmaap_setup_session}    /events/dcaeClOutput   headers=${suite_headers}
-    Should Be Equal    ${resp.text}    ${posted_event_to_dmaap}
 
 Check BBS log
     [Arguments]    ${searched_log}
