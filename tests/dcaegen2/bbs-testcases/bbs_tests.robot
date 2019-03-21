@@ -28,7 +28,7 @@ ${UPDATE_POLICY}    %{WORKSPACE}/tests/dcaegen2/bbs-testcases/assets/json_events
 *** Test Cases ***
 Valid DMaaP CPE_AUTHENTICATION event can trigger Policy
     [Documentation]    BBS get valid CPE_AUTHENTICATION event from DMaaP with required fields - BBS triggers Policy
-    [Tags]    BBS    Valid CPE_AUTHENTICATION event    test
+    [Tags]    BBS    Valid CPE_AUTHENTICATION event
     [Template]    Valid auth event processing
     ${AUTH_EVENT_WITH_ALL_VALID_REQUIRED_FIELDS}
     ${AUTH_EVENT_WITHOUT_SWVERSION}
@@ -53,10 +53,10 @@ Get valid CPE_AUTHENTICATION event from DMaaP and PNF record in AAI does not exi
 
 CPE_AUTHENTICATION Event in DMaaP is not JSON format
     [Documentation]    BBS CPE_AUTHENTICATION not JSON format event from DMaaP - BBS does not Trigger Policy
-    [Tags]    BBS
+    [Tags]    BBS    test
     ${data}=    Get Data From File    ${AUTH_NOT_JSON_FORMAT}
     Set event in DMaaP    ${data}
-    Wait Until Keyword Succeeds    100x    300ms    Check BBS log    |java.lang.IllegalStateException: Not a JSON Array:
+    Wait Until Keyword Succeeds    100x    300ms    Check BBS log    DMaaP Consumption Exception: Not a JSON Array:
 
 Get valid CPE_AUTHENTICATION event from DMaaP and AAI is not responding
     [Documentation]    BBS get valid CPE_AUTHENTICATION event from DMaaP with all required fields and AAI is not responding - BBS does not trigger Policy
@@ -70,7 +70,7 @@ Get valid CPE_AUTHENTICATION event from DMaaP and AAI is not responding
     
 Valid DMaaP PNF_UPDATE event can trigger Policy
     [Documentation]    BBS get valid PNF_UPDATE event from DMaaP with required fields - BBS triggers Policy
-    [Tags]    BBS    Valid PNF_UPDATE event    test
+    [Tags]    BBS    Valid PNF_UPDATE event
     [Template]    Valid update event processing
     ${UPDATE_EVENT_WITH_ALL_VALID_REQUIRED_FIELDS}
 
@@ -93,10 +93,10 @@ Get valid PNF_UPDATE event from DMaaP and PNF record in AAI does not exist
 
 PNF_UPDATE Event in DMaaP is not JSON format
     [Documentation]    BBS PNF_UPDATE not JSON format event from DMaaP - BBS does not Trigger Policy
-    [Tags]    BBS
+    [Tags]    BBS    test
     ${data}=    Get Data From File    ${UPDATE_NOT_JSON_FORMAT}
     Set event in DMaaP    ${data}
-    Wait Until Keyword Succeeds    100x    300ms    Check BBS log    |java.lang.IllegalStateException: Not a JSON Array:
+    Wait Until Keyword Succeeds    100x    300ms    Check BBS log    DMaaP Consumption Exception: Not a JSON Array:
 
 Get valid PNF_UPDATE event from DMaaP and AAI is not responding
     [Documentation]    BBS get valid PNF_UPDATE event from DMaaP with all required fields and AAI is not responding - BBS does not trigger Policy

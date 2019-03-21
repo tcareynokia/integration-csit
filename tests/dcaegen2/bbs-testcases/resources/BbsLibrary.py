@@ -14,7 +14,7 @@ class BbsLibrary(object):
         client = docker.from_env()
         container = client.containers.get('bbs-event-processor')
 
-        alog = container.logs(stream=False)
+        alog = container.logs(stream=False, tail=1000)
         try:
             alog = alog.decode()
         except AttributeError:
