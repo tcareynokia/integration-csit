@@ -5,7 +5,7 @@ Documentation     Integration tests for BBS.
 Library           BbsLibrary
 Resource          resources/bbs_library.robot
 Resource          ../../common.robot
-Suite Setup       Run keywords   Create header  AND  Create sessions  AND  Ensure Container Is Running  bbs-event-processor 
+Suite Setup       Run keywords   Create header  AND  Create sessions  AND  Set AAI Records     AND    Ensure Container Is Running  bbs-event-processor
 Test Teardown     Reset Simulators
 
 
@@ -24,11 +24,13 @@ ${UPDATE_EVENT_WITH_MISSING_ATTACHMENT}    %{WORKSPACE}/tests/dcaegen2/bbs-testc
 ${UPDATE_EVENT_WITH_MISSING_CORRELATION}    %{WORKSPACE}/tests/dcaegen2/bbs-testcases/assets/json_events/update_event_with_missing_correlation.json
 ${UPDATE_NOT_JSON_FORMAT}    %{WORKSPACE}/tests/dcaegen2/bbs-testcases/assets/json_events/update_not_json_format.json
 ${UPDATE_POLICY}    %{WORKSPACE}/tests/dcaegen2/bbs-testcases/assets/json_events/update_policy_with_all_fields.json
+${AAI_PNFS}    %{WORKSPACE}/tests/dcaegen2/bbs-testcases/assets/aai_records/aai_pnfs.json
+${AAI_SERVICES}    %{WORKSPACE}/tests/dcaegen2/bbs-testcases/assets/aai_records/aai_services.json
 
 *** Test Cases ***
 Valid DMaaP CPE_AUTHENTICATION event can trigger Policy
     [Documentation]    BBS get valid CPE_AUTHENTICATION event from DMaaP with required fields - BBS triggers Policy
-    [Tags]    BBS    Valid CPE_AUTHENTICATION event
+    [Tags]    BBS    Valid CPE_AUTHENTICATION event    test
     [Template]    Valid auth event processing
     ${AUTH_EVENT_WITH_ALL_VALID_REQUIRED_FIELDS}
     ${AUTH_EVENT_WITHOUT_SWVERSION}
@@ -53,7 +55,7 @@ Get valid CPE_AUTHENTICATION event from DMaaP and PNF record in AAI does not exi
 
 CPE_AUTHENTICATION Event in DMaaP is not JSON format
     [Documentation]    BBS CPE_AUTHENTICATION not JSON format event from DMaaP - BBS does not Trigger Policy
-    [Tags]    BBS    test
+    [Tags]    BBS
     ${data}=    Get Data From File    ${AUTH_NOT_JSON_FORMAT}
     Set event in DMaaP    ${data}
     Wait Until Keyword Succeeds    100x    300ms    Check BBS log    DMaaP Consumption Exception: Not a JSON Array:
@@ -93,7 +95,7 @@ Get valid PNF_UPDATE event from DMaaP and PNF record in AAI does not exist
 
 PNF_UPDATE Event in DMaaP is not JSON format
     [Documentation]    BBS PNF_UPDATE not JSON format event from DMaaP - BBS does not Trigger Policy
-    [Tags]    BBS    test
+    [Tags]    BBS
     ${data}=    Get Data From File    ${UPDATE_NOT_JSON_FORMAT}
     Set event in DMaaP    ${data}
     Wait Until Keyword Succeeds    100x    300ms    Check BBS log    DMaaP Consumption Exception: Not a JSON Array:

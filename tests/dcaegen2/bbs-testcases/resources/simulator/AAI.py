@@ -3,8 +3,10 @@ import time
 from http.server import BaseHTTPRequestHandler
 import httpServerLib
 
-pnfs = 'Empty'
+import json
 
+pnfs = []
+services = []
 
 class AAISetup(BaseHTTPRequestHandler):
 
@@ -13,6 +15,13 @@ class AAISetup(BaseHTTPRequestHandler):
             global pnfs
             content_length = int(self.headers['Content-Length'])
             pnfs = self.rfile.read(content_length)
+            pnfs = pnfs.decode()
+            httpServerLib.header_200_and_json(self)
+        elif re.search('/set_services', self.path):
+            global services
+            content_length = int(self.headers['Content-Length'])
+            services = self.rfile.read(content_length)
+            services = services.decode()
             httpServerLib.header_200_and_json(self)
 
         return
@@ -20,7 +29,6 @@ class AAISetup(BaseHTTPRequestHandler):
     def do_POST(self):
         if re.search('/reset', self.path):
             global pnfs
-            pnfs = 'Empty'
             httpServerLib.header_200_and_json(self)
 
         return
@@ -28,29 +36,45 @@ class AAISetup(BaseHTTPRequestHandler):
 
 class AAIHandler(BaseHTTPRequestHandler):
 
-    def do_PATCH(self):
-        global pnfs
-        pnfs_name = '/aai/v14/network/pnfs/pnf/' + pnfs.decode()
-        if re.search('wrong_aai_record', self.path):
-            self.send_response(400)
-            self.end_headers()
-        elif re.search(pnfs_name, self.path):
-            self.send_response(200)
-            self.end_headers()
-            
-        return
-
     def do_GET(self):
         global pnfs
-        pnfs_name = '/aai/v14/network/pnfs/pnf/'
-        try:
-            pnfs_name = pnfs_name + pnfs.decode()
-        except AttributeError:
-            pass
+        global services
+        pnf_path = '/aai/v14/network/pnfs/pnf/'
+        service_path = '/aai/v14/nodes/service-instances/service-instance/'
+        found_resource = None
+        if re.search(pnf_path, self.path):
+            try:
+                python_pnfs = json.loads(pnfs)
+            except AttributeError:
+                python_pnfs = []
+            for pnf_instance in python_pnfs:
+                try:
+                    pnf_name = pnf_path + pnf_instance.get("pnf-name")
+                except AttributeError:
+                    pnf_name = "PNF not found"
+                if re.search(pnf_name, self.path):
+                    found_resource = pnf_instance
+                    break
+        elif re.search(service_path, self.path):
+            try:
+                python_services = json.loads(services)
+            except AttributeError:
+                python_services = []
+            for service_instance in python_services:
+                try:
+                    service_name = service_path + service_instance.get("service-instance-id")
+                except AttributeError:
+                    pnf_name = "Service not found"
+                if re.search(service_name, self.path):
+                    found_resource = service_instance
+                    break
 
-        if re.search(pnfs_name, self.path):
-            self.send_response(200)
-            self.end_headers()
+        if found_resource is not None:
+                # Prepare the response for DMaaP (byte encoded JSON Object)
+                found_resource = json.dumps(found_resource)
+                found_resource = found_resource.encode()
+                httpServerLib.header_200_and_json(self)
+                self.wfile.write(found_resource)
         else:
             send_response(204)
             self.end_headers()

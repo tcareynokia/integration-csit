@@ -19,6 +19,17 @@ Reset Simulators
     Reset AAI simulator
     Reset DMaaP simulator
 
+Set AAI Records
+    [Timeout]    30s
+    ${data}=    Get Data From File    ${AAI_PNFS}
+    ${headers}=    Create Dictionary    Accept=application/json    Content-Type=text/html
+    ${resp} =    Put Request    ${aai_setup_session}    /set_pnfs    headers=${headers}    data=${data}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${data}=    Get Data From File    ${AAI_SERVICES}
+    ${headers}=    Create Dictionary    Accept=application/json    Content-Type=text/html
+    ${resp} =    Put Request    ${aai_setup_session}    /set_services    headers=${headers}    data=${data}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
 Invalid auth event processing
     [Arguments]    ${input_invalid_event_in_dmaap}
     [Timeout]    30s
@@ -32,9 +43,6 @@ Valid auth event processing
     [Arguments]    ${input_valid_event_in_dmaap}
     [Timeout]    30s
     ${data}=    Get Data From File    ${input_valid_event_in_dmaap}
-    ${posted_event_to_dmaap}=    Create auth policy    ${data}
-    ${pnf_name}=    Create PNF name from auth    ${data}
-    Set PNF name in AAI    ${pnf_name}
     Set event in DMaaP    ${data}
     Wait Until Keyword Succeeds    100x    300ms    Check policy    ${AUTH_POLICY}
 
