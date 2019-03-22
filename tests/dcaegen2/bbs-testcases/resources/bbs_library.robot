@@ -30,21 +30,29 @@ Set AAI Records
     ${resp} =    Put Request    ${aai_setup_session}    /set_services    headers=${headers}    data=${data}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+Invalid rgmac auth event processing
+    [Arguments]    ${input_invalid_event_in_dmaap}
+    [Timeout]    30s
+    ${data}=    Get Data From File    ${input_invalid_event_in_dmaap}
+    Set event in DMaaP    ${data}
+    ${err_msg}=    Catenate    SEPARATOR= \\n    RGW MAC address taken from event (Optional[]) does not match with A&AI metadata corresponding value
+    Wait Until Keyword Succeeds    5x    6000ms    Check BBS log    ${err_msg}
+
 Invalid auth event processing
     [Arguments]    ${input_invalid_event_in_dmaap}
     [Timeout]    30s
     ${data}=    Get Data From File    ${input_invalid_event_in_dmaap}
     Set event in DMaaP    ${data}
-    ${invalid_policy}=    Create invalid auth policy    ${data}
-    ${err_msg}=    Catenate    SEPARATOR= \\n    |Incorrect json, consumerDmaapModel can not be created:     ${invalid_policy}
-    Wait Until Keyword Succeeds    100x    100ms    Check BBS log    ${err_msg}
+    ${json_obj}=    Get invalid auth elements    ${data}
+    ${err_msg}=    Catenate    SEPARATOR= \\n    Incorrect CPE Authentication JSON event:    ${json_obj}
+    Wait Until Keyword Succeeds    5x    6000ms    Check BBS log    ${err_msg}
 
 Valid auth event processing
     [Arguments]    ${input_valid_event_in_dmaap}
     [Timeout]    30s
     ${data}=    Get Data From File    ${input_valid_event_in_dmaap}
     Set event in DMaaP    ${data}
-    Wait Until Keyword Succeeds    100x    300ms    Check policy    ${AUTH_POLICY}
+    Wait Until Keyword Succeeds    5x    6000ms    Check policy    ${AUTH_POLICY}
 
 Check policy
     [Arguments]    ${json_policy_file}
@@ -55,22 +63,19 @@ Check policy
  
 Invalid update event processing
     [Arguments]    ${input_invalid_event_in_dmaap}
-    [Timeout]    30s
+    [Timeout]    300s
     ${data}=    Get Data From File    ${input_invalid_event_in_dmaap}
     Set event in DMaaP    ${data}
-    ${invalid_policy}=    Create invalid update policy    ${data}
-    ${err_msg}=    Catenate    SEPARATOR= \\n    |Incorrect json, consumerDmaapModel can not be created:     ${invalid_policy}
-    Wait Until Keyword Succeeds    100x    100ms    Check BBS log    ${err_msg}
+    ${json_obj}=    Get invalid update elements    ${data}
+    ${err_msg}=    Catenate    SEPARATOR= \\n    Incorrect Incorrect Re-Registration  JSON event:    ${json_obj}
+    Wait Until Keyword Succeeds    5x    6000ms    Check BBS log    ${err_msg}
 
 Valid update event processing
     [Arguments]    ${input_valid_event_in_dmaap}
-    [Timeout]    30s
+    [Timeout]    300s
     ${data}=    Get Data From File    ${input_valid_event_in_dmaap}
-    ${posted_event_to_dmaap}=    Create update policy    ${data}
-    ${pnf_name}=    Create PNF name from update    ${data}
-    Set PNF name in AAI    ${pnf_name}
     Set event in DMaaP    ${data}
-    Wait Until Keyword Succeeds    100x    300ms    Check policy     ${AUTH_POLICY}
+    Wait Until Keyword Succeeds    5x    6000ms    Check policy     ${UPDATE_POLICY}
 
 
 Check BBS log

@@ -2,6 +2,7 @@ import json
 
 import docker
 import time
+from docker.utils.json_stream import json_stream
 
 
 class BbsLibrary(object):
@@ -27,27 +28,66 @@ class BbsLibrary(object):
             return False
 
     @staticmethod
-    def create_auth_policy(json_file):
-        json_to_python = json.loads(json_file)
-        str_json = json_to_python
-        """
-        ipv4 = json_to_python.get("event").get("pnfRegistrationFields").get("oamV4IpAddress")
-        ipv6 = json_to_python.get("event").get("pnfRegistrationFields").get("oamV6IpAddress") if "oamV6IpAddress" in json_to_python["event"]["pnfRegistrationFields"] else ""
-        correlation_id = json_to_python.get("event").get("commonEventHeader").get("sourceName")
-        str_json = '{"correlationId":"' + correlation_id + '","ipaddress-v4-oam":"' + ipv4 + '","ipaddress-v6-oam":"' + ipv6 + '"}'
-        """
-        python_to_json = json.dumps(str_json)
-        return python_to_json.replace("\\", "")[1:-1]
-
-    @staticmethod
-    def create_invalid_auth_policy(json_file):
-        return BbsLibrary.create_auth_policy(json_file)
-
-    @staticmethod
     def create_pnf_name_from_auth(json_file):
         json_to_python = json.loads(json_file)
         correlation_id = json_to_python.get("event").get("commonEventHeader").get("sourceName")
         return correlation_id
+
+    @staticmethod
+    def get_invalid_auth_elements(json_file):
+        """
+        Get the correlationId, oldState, newState, stateInterface, macAddress, swVersion elements
+        from the invalid message and place the elements into a JSON object (string) as fields for comparision
+        """
+        json_to_python = json.loads(json_file)
+        correlation_id = json_to_python.get("event").get("commonEventHeader").get("sourceName")
+        oldState = json_to_python.get("event").get("stateChangeFields").get("oldState")
+        newState = json_to_python.get("event").get("stateChangeFields").get("newState")
+        stateInterface = json_to_python.get("event").get("stateChangeFields").get("stateInterface")
+        macAddress = json_to_python.get("event").get("stateChangeFields").get("additionalFields").get("macAddress")
+        swVersion = json_to_python.get("event").get("stateChangeFields").get("additionalFields").get("swVersion")
+        
+        inv_fields = dict()
+        inv_fields['correlationId'] = correlation_id
+        inv_fields['oldState'] = oldState
+        inv_fields['newState'] = newState
+        inv_fields['stateInterface'] = stateInterface
+        inv_fields['macAddress'] = macAddress
+        inv_fields['swVersion'] = swVersion
+        
+        # Transform the dictionary to JSON string
+        json_str = json.dumps(inv_fields)
+        
+        # Need to remove spaces between elements
+        json_str = json_str.replace(', ', ',')
+        return json_str
+
+    @staticmethod
+    def get_invalid_update_elements(json_file):
+        """
+        Get the correlationId, attachment-point, remote-id, cvlan, svlan, elements
+        from the invalid message and place the elements into a JSON object (string) as fields for comparision
+        """
+        json_to_python = json.loads(json_file)
+        correlation_id = json_to_python.get("correlationId")
+        attachmentPoint = json_to_python.get("additionalFields").get("attachmentPoint")
+        remoteId = json_to_python.get("additionalFields").get("remoteId")
+        cvlan = json_to_python.get("additionalFields").get("cvlan")
+        svlan = json_to_python.get("additionalFields").get("svlan")
+        
+        inv_fields = dict()
+        inv_fields['correlationId'] = correlation_id
+        inv_fields['attachment-point'] = attachmentPoint
+        inv_fields['remote-id'] = remoteId
+        inv_fields['cvlan'] = cvlan
+        inv_fields['svlan'] = svlan
+        
+        # Transform the dictionary to JSON string
+        json_str = json.dumps(inv_fields)
+        
+        # Need to remove spaces between elements
+        json_str = json_str.replace(', ', ',')
+        return json_str
 
     @staticmethod
     def compare_policy(dmaap_policy, json_policy):
@@ -58,7 +98,7 @@ class BbsLibrary(object):
             python_policy = ""
         
         try:
-            python_dmaap_policy = json.loads(dmaap_policy).pop()
+            python_dmaap_policy = json.loads(dmaap_policy)
         except:
             python_dmaap_policy = ""
 
@@ -78,30 +118,16 @@ class BbsLibrary(object):
         return resp
 
     @staticmethod
-    def create_update_policy(json_file):
-        json_to_python = json.loads(json_file)
-        str_json = json_to_python
-        """
-        ipv4 = json_to_python.get("event").get("pnfRegistrationFields").get("oamV4IpAddress")
-        ipv6 = json_to_python.get("event").get("pnfRegistrationFields").get("oamV6IpAddress") if "oamV6IpAddress" in json_to_python["event"]["pnfRegistrationFields"] else ""
-        correlation_id = json_to_python.get("event").get("commonEventHeader").get("sourceName")
-        str_json = '{"correlationId":"' + correlation_id + '","ipaddress-v4-oam":"' + ipv4 + '","ipaddress-v6-oam":"' + ipv6 + '"}'
-        """
-        python_to_json = json.dumps(str_json)
-        return python_to_json.replace("\\", "")[1:-1]
-
-    @staticmethod
-    def create_invalid_update_policy(json_file):
-        return BbsLibrary.create_update_policy(json_file)
-
-    @staticmethod
     def create_pnf_name_from_update(json_file):
         json_to_python = json.loads(json_file)
         correlation_id = json_to_python.get("correlationId")
         return correlation_id
 
     @staticmethod
-    def ensure_container_is_running(name):
+    def ensure_container_is_running(name, debug):
+        
+        if debug == "True": return
+        
         client = docker.from_env()
 
         if not BbsLibrary.is_in_status(client, name, "running"):
@@ -113,7 +139,10 @@ class BbsLibrary(object):
         BbsLibrary.print_status(client)
 
     @staticmethod
-    def ensure_container_is_exited(name):
+    def ensure_container_is_exited(name, debug):
+        
+        if debug == "True": return
+
         client = docker.from_env()
 
         if not BbsLibrary.is_in_status(client, name, "exited"):

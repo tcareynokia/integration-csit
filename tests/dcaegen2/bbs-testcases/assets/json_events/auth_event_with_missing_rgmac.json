@@ -23,7 +23,7 @@
             "stateInterface": "",
             "additionalFields": {
                 "macAddress": "",
-                "swVersion": ""
+                "swVersion": "1.2.3"
             }
         }
     }

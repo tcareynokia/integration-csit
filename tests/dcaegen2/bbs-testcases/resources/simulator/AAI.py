@@ -70,13 +70,13 @@ class AAIHandler(BaseHTTPRequestHandler):
                     break
 
         if found_resource is not None:
-                # Prepare the response for DMaaP (byte encoded JSON Object)
-                found_resource = json.dumps(found_resource)
-                found_resource = found_resource.encode()
-                httpServerLib.header_200_and_json(self)
-                self.wfile.write(found_resource)
+            # Prepare the response for DMaaP (byte encoded JSON Object)
+            found_resource = json.dumps(found_resource)
+            found_resource = found_resource.encode()
+            httpServerLib.header_200_and_json(self)
+            self.wfile.write(found_resource)
         else:
-            send_response(204)
+            self.send_response(400)
             self.end_headers()
             
         return

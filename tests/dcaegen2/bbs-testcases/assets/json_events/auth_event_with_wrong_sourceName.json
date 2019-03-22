@@ -7,7 +7,7 @@
             "eventId": "ab305d54-85b4-a31b-7db2fb6b9e546015",
             "eventType": "applicationNf",
             "sourceId": "",
-            "sourceName": "NVendor-Equip_Model-SN1234",
+            "sourceName": "Wrong-Source-Name",
             "reportingEntityId": "",
             "reportingEntityName": "thirdparty-sdnc-idfromesrrequest",
             "priority": "Normal",
@@ -18,11 +18,12 @@
         },
         "stateChangeFields": {
             "stateChangeFieldsVersion": 1,
-            "oldState": "",
-            "newState": "",
+            "oldState": "outOfService",
+            "newState": "inService",
             "stateInterface": "",
             "additionalFields": {
-                "macAddress": "01:02:03:04:05:06"
+                "macAddress": "01:02:03:04:05:06",
+                "swVersion": "1.2.3"
             }
         }
     }
