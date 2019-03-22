@@ -5,7 +5,7 @@ Documentation     Integration tests for BBS.
 Library           BbsLibrary
 Resource          resources/bbs_library.robot
 Resource          ../../common.robot
-Suite Setup       Run keywords   Create header  AND  Create sessions  AND  Set AAI Records     AND    Ensure Container Is Running  bbs-event-processor    False
+Suite Setup       Run keywords   Create header  AND  Create sessions  AND  Set AAI Records     AND    Ensure Container Is Running  bbs-event-processor
 Test Teardown     Reset Simulators
 
 
@@ -67,13 +67,13 @@ CPE_AUTHENTICATION Event in DMaaP is not JSON format
 
 Get valid CPE_AUTHENTICATION event from DMaaP and AAI is not responding
     [Documentation]    BBS get valid CPE_AUTHENTICATION event from DMaaP with all required fields and AAI is not responding - BBS does not trigger Policy
-    [Tags]    BBS    AAI 
+    [Tags]    BBS    AAI    Uses containers
     [Timeout]    180s
     ${data}=    Get Data From File    ${AUTH_EVENT_WITH_ALL_VALID_REQUIRED_FIELDS}
-    Ensure Container Is Exited   aai_simulator    False
+    Ensure Container Is Exited   aai_simulator
     Set event in DMaaP    ${data}
     Wait Until Keyword Succeeds    100x    300ms    Check BBS log    Error while retrieving PNF: Connection refused:
-    Ensure Container Is Running  aai_simulator    False
+    Ensure Container Is Running  aai_simulator
     
 Valid DMaaP PNF_UPDATE event can trigger Policy
     [Documentation]    BBS get valid PNF_UPDATE event from DMaaP with required fields - BBS triggers Policy
@@ -106,10 +106,10 @@ PNF_UPDATE Event in DMaaP is not JSON format
 
 Get valid PNF_UPDATE event from DMaaP and AAI is not responding
     [Documentation]    BBS get valid PNF_UPDATE event from DMaaP with all required fields and AAI is not responding - BBS does not trigger Policy
-    [Tags]    BBS    AAI
+    [Tags]    BBS    AAI    Uses containers
     [Timeout]    180s
     ${data}=    Get Data From File    ${UPDATE_EVENT_WITH_ALL_VALID_REQUIRED_FIELDS}
-    Ensure Container Is Exited   aai_simulator    False
+    Ensure Container Is Exited   aai_simulator
     Set event in DMaaP    ${data}
     Wait Until Keyword Succeeds    100x    300ms    Check BBS log    Error while retrieving PNF: Connection refused:
-    Ensure Container Is Running  aai_simulator    False
+    Ensure Container Is Running  aai_simulator

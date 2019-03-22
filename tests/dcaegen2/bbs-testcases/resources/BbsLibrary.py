@@ -46,6 +46,8 @@ class BbsLibrary(object):
         stateInterface = json_to_python.get("event").get("stateChangeFields").get("stateInterface")
         macAddress = json_to_python.get("event").get("stateChangeFields").get("additionalFields").get("macAddress")
         swVersion = json_to_python.get("event").get("stateChangeFields").get("additionalFields").get("swVersion")
+        if swVersion is None:
+            swVersion = ""
         
         inv_fields = dict()
         inv_fields['correlationId'] = correlation_id
@@ -70,8 +72,8 @@ class BbsLibrary(object):
         """
         json_to_python = json.loads(json_file)
         correlation_id = json_to_python.get("correlationId")
-        attachmentPoint = json_to_python.get("additionalFields").get("attachmentPoint")
-        remoteId = json_to_python.get("additionalFields").get("remoteId")
+        attachmentPoint = json_to_python.get("additionalFields").get("attachment-point")
+        remoteId = json_to_python.get("additionalFields").get("remote-id")
         cvlan = json_to_python.get("additionalFields").get("cvlan")
         svlan = json_to_python.get("additionalFields").get("svlan")
         
@@ -124,9 +126,7 @@ class BbsLibrary(object):
         return correlation_id
 
     @staticmethod
-    def ensure_container_is_running(name, debug):
-        
-        if debug == "True": return
+    def ensure_container_is_running(name):
         
         client = docker.from_env()
 
@@ -139,9 +139,7 @@ class BbsLibrary(object):
         BbsLibrary.print_status(client)
 
     @staticmethod
-    def ensure_container_is_exited(name, debug):
-        
-        if debug == "True": return
+    def ensure_container_is_exited(name):
 
         client = docker.from_env()
 

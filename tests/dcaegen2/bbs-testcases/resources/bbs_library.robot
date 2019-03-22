@@ -40,13 +40,12 @@ Invalid rgmac auth event processing
 
 Invalid auth event processing
     [Arguments]    ${input_invalid_event_in_dmaap}
-    [Timeout]    30s
+    [Timeout]    300s
     ${data}=    Get Data From File    ${input_invalid_event_in_dmaap}
     Set event in DMaaP    ${data}
-    ${json_obj}=    Get invalid auth elements    ${data}
-    ${err_msg}=    Catenate    SEPARATOR= \\n    Incorrect CPE Authentication JSON event:    ${json_obj}
-    Wait Until Keyword Succeeds    5x    6000ms    Check BBS log    ${err_msg}
-
+    ${json_obj}=    Get invalid auth elements    ${data}   
+    Wait Until Keyword Succeeds    5x    6000ms    Check BBS log    Incorrect CPE Authentication JSON event:
+    Wait Until Keyword Succeeds    5x    6000ms    Check BBS log    ${json_obj}
 Valid auth event processing
     [Arguments]    ${input_valid_event_in_dmaap}
     [Timeout]    30s
@@ -67,8 +66,9 @@ Invalid update event processing
     ${data}=    Get Data From File    ${input_invalid_event_in_dmaap}
     Set event in DMaaP    ${data}
     ${json_obj}=    Get invalid update elements    ${data}
-    ${err_msg}=    Catenate    SEPARATOR= \\n    Incorrect Incorrect Re-Registration  JSON event:    ${json_obj}
-    Wait Until Keyword Succeeds    5x    6000ms    Check BBS log    ${err_msg}
+    Wait Until Keyword Succeeds    5x    6000ms    Check BBS log    Incorrect Re-Registration
+    Wait Until Keyword Succeeds    5x    6000ms    Check BBS log    JSON event:
+    Wait Until Keyword Succeeds    5x    6000ms    Check BBS log    ${json_obj}
 
 Valid update event processing
     [Arguments]    ${input_valid_event_in_dmaap}
