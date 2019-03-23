@@ -72,7 +72,7 @@ Get valid CPE_AUTHENTICATION event from DMaaP and AAI is not responding
     ${data}=    Get Data From File    ${AUTH_EVENT_WITH_ALL_VALID_REQUIRED_FIELDS}
     Ensure Container Is Exited   aai_simulator
     Set event in DMaaP    ${data}
-    Wait Until Keyword Succeeds    100x    300ms    Check BBS log    Error while retrieving PNF: Connection refused:
+    Wait Until Keyword Succeeds    100x    300ms    Check BBS log    Error while retrieving PNF: aai_simulator: Try again
     Ensure Container Is Running  aai_simulator
     
 Valid DMaaP PNF_UPDATE event can trigger Policy
@@ -111,5 +111,5 @@ Get valid PNF_UPDATE event from DMaaP and AAI is not responding
     ${data}=    Get Data From File    ${UPDATE_EVENT_WITH_ALL_VALID_REQUIRED_FIELDS}
     Ensure Container Is Exited   aai_simulator
     Set event in DMaaP    ${data}
-    Wait Until Keyword Succeeds    100x    300ms    Check BBS log    Error while retrieving PNF: Connection refused:
+    Wait Until Keyword Succeeds    100x    300ms    Check BBS log    Error while retrieving PNF: aai_simulator: Try again
     Ensure Container Is Running  aai_simulator
