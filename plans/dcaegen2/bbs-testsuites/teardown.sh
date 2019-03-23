@@ -16,6 +16,6 @@
 #
 
 kill-instance.sh bbs
-kill-instance.sh ssl_bbs
+# kill-instance.sh ssl_bbs
 kill-instance.sh dmaap_simulator
 kill-instance.sh aai_simulator
