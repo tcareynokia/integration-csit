@@ -1,7 +1,7 @@
 version: '3'
 services:
   bbs:
-    image: registry.gitlab.com/onap-bbs/onap-bbs-docker-images/bbs-event-processor 
+    image: registry.gitlab.com/onap-bbs/onap-bbs-docker-images/bbs-ep-component:1.0.0-SNAPSHOT
     command: >
         --dmaap.dmaapConsumerConfiguration.dmaapHostName=dmaap-bc
         --dmaap.dmaapConsumerConfiguration.dmaapPortNumber=2222
@@ -42,7 +42,7 @@ services:
      - aai
 
   ssl_bbs:
-      image: registry.gitlab.com/onap-bbs/onap-bbs-docker-images/bbs-event-processor 
+      image: registry.gitlab.com/onap-bbs/onap-bbs-docker-images/bbs-ep-component:1.0.0-SNAPSHOT
       command: >
           --dmaap.dmaapConsumerConfiguration.dmaapHostName=dmaap-bc
           --dmaap.dmaapConsumerConfiguration.dmaapPortNumber=2223
