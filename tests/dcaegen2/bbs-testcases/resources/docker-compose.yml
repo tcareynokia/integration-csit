@@ -94,6 +94,7 @@ services:
        - aai
 
   dmaap-bc:
+    image: dmaap-bc:latest
     build:
       context: simulator
       dockerfile: DMaaP_simulator
@@ -104,6 +105,7 @@ services:
     container_name: dmaap_simulator
 
   aai:
+     image: aai:latest
      build:
        context: simulator
        dockerfile: AAI_simulator
