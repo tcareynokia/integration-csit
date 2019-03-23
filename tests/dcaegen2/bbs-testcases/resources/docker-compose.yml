@@ -3,22 +3,22 @@ services:
   bbs:
     image: registry.gitlab.com/onap-bbs/onap-bbs-docker-images/bbs-ep-component:1.0.0-SNAPSHOT
     command: >
-        --dmaap.dmaapConsumerConfiguration.dmaapHostName=dmaap-bc
+        --dmaap.dmaapConsumerConfiguration.dmaapHostName=dmaap_simulator
         --dmaap.dmaapConsumerConfiguration.dmaapPortNumber=2222
-        --dmaap.dmaapProducerConfiguration.dmaapHostName=dmaap-bc
+        --dmaap.dmaapProducerConfiguration.dmaapHostName=dmaap_simulator
         --dmaap.dmaapProducerConfiguration.dmaapPortNumber=2222
         --aai.aaiClientConfiguration.aaiHostPortNumber=3333
-        --aai.aaiClientConfiguration.aaiHost=aai
+        --aai.aaiClientConfiguration.aaiHost=aai_simulator
         --aai.aaiClientConfiguration.aaiProtocol=http
     ports:
       - "32100:8100"
     environment:
-      CONFIGS_DMAAP_CONSUMER_RE-REGISTRATION_DMAAPHOSTNAME: dmaap-bc
+      CONFIGS_DMAAP_CONSUMER_RE-REGISTRATION_DMAAPHOSTNAME: dmaap_simulator
       CONFIGS_DMAAP_CONSUMER_RE-REGISTRATION_DMAAPPORTNUMBER: 2222
       CONFIGS_DMAAP_CONSUMER_RE-REGISTRATION_DMAAPTOPICNAME: /events/unauthenticated_PNF_UPDATE
       CONFIGS_DMAAP_CONSUMER_RE-REGISTRATION_CONSUMERGROUP: 
       CONFIGS_DMAAP_CONSUMER_RE-REGISTRATION_CONSUMERID: 
-      CONFIGS_DMAAP_CONSUMER_CPE-AUTHENTICATION_DMAAPHOSTNAME: dmaap-bc
+      CONFIGS_DMAAP_CONSUMER_CPE-AUTHENTICATION_DMAAPHOSTNAME: dmaap_simulator
       CONFIGS_DMAAP_CONSUMER_CPE-AUTHENTICATION_DMAAPPORTNUMBER: 2222
       CONFIGS_DMAAP_CONSUMER_CPE-AUTHENTICATION_DMAAPTOPICNAME: /events/unauthenticated_CPE_AUTHENTICATION
       CONFIGS_DMAAP_CONSUMER_CPE-AUTHENTICATION_CONSUMERGROUP:
@@ -26,7 +26,7 @@ services:
       CONFIGS_DMAAP_PRODUCER_DMAAPHOSTNAME: dmaap-bc
       CONFIGS_DMAAP_PRODUCER_DMAAPPORTNUMBER: 2222
       CONFIGS_DMAAP_PRODUCER_DMAAPTOPICNAME: /events/unauthenticated_DCAE_CL_OUTPUT
-      CONFIGS_AAI_CLIENT_AAIHOST: aai
+      CONFIGS_AAI_CLIENT_AAIHOST: aai_simulator
       CONFIGS_AAI_CLIENT_AAIPORT: 3333
       CONFIGS_AAI_CLIENT_AAIPROTOCOL: http
       CONFIGS_APPLICATION_PIPELINESPOLLINGINTERVALSEC: 20
@@ -44,14 +44,14 @@ services:
   ssl_bbs:
       image: registry.gitlab.com/onap-bbs/onap-bbs-docker-images/bbs-ep-component:1.0.0-SNAPSHOT
       command: >
-          --dmaap.dmaapConsumerConfiguration.dmaapHostName=dmaap-bc
+          --dmaap.dmaapConsumerConfiguration.dmaapHostName=dmaap_simulator
           --dmaap.dmaapConsumerConfiguration.dmaapPortNumber=2223
           --dmaap.dmaapConsumerConfiguration.dmaapProtocol=https
-          --dmaap.dmaapProducerConfiguration.dmaapHostName=dmaap-bc
+          --dmaap.dmaapProducerConfiguration.dmaapHostName=dmaap_simulator
           --dmaap.dmaapProducerConfiguration.dmaapPortNumber=2223
           --dmaap.dmaapProducerConfiguration.dmaapProtocol=https
           --aai.aaiClientConfiguration.aaiHostPortNumber=3334
-          --aai.aaiClientConfiguration.aaiHost=aai
+          --aai.aaiClientConfiguration.aaiHost=aai_simulator
           --aai.aaiClientConfiguration.aaiProtocol=https
           --security.enableAaiCertAuth=true
           --security.enableDmaapCertAuth=true
@@ -60,20 +60,20 @@ services:
           --security.trustStorePath=/tmp/certs/org.onap.dcae.trust.jks
           --security.trustStorePasswordPath=/tmp/certs/truststore.password
       environment:
-         CONFIGS_DMAAP_CONSUMER_RE-REGISTRATION_DMAAPHOSTNAME: dmaap-bc
+         CONFIGS_DMAAP_CONSUMER_RE-REGISTRATION_DMAAPHOSTNAME: dmaap_simulator
          CONFIGS_DMAAP_CONSUMER_RE-REGISTRATION_DMAAPPORTNUMBER: 2223
          CONFIGS_DMAAP_CONSUMER_RE-REGISTRATION_DMAAPTOPICNAME: /events/unauthenticated_PNF_UPDATE
          CONFIGS_DMAAP_CONSUMER_RE-REGISTRATION_CONSUMERGROUP: 
          CONFIGS_DMAAP_CONSUMER_RE-REGISTRATION_CONSUMERID: 
-         CONFIGS_DMAAP_CONSUMER_CPE-AUTHENTICATION_DMAAPHOSTNAME: dmaap-bc
+         CONFIGS_DMAAP_CONSUMER_CPE-AUTHENTICATION_DMAAPHOSTNAME: dmaap_simulator
          CONFIGS_DMAAP_CONSUMER_CPE-AUTHENTICATION_DMAAPPORTNUMBER: 2223
          CONFIGS_DMAAP_CONSUMER_CPE-AUTHENTICATION_DMAAPTOPICNAME: /events/unauthenticated_CPE_AUTHENTICATION
          CONFIGS_DMAAP_CONSUMER_CPE-AUTHENTICATION_CONSUMERGROUP:
          CONFIGS_DMAAP_CONSUMER_CPE-AUTHENTICATION_CONSUMERID:
-         CONFIGS_DMAAP_PRODUCER_DMAAPHOSTNAME: dmaap-bc
+         CONFIGS_DMAAP_PRODUCER_DMAAPHOSTNAME: dmaap_simulator
          CONFIGS_DMAAP_PRODUCER_DMAAPPORTNUMBER: 2223
          CONFIGS_DMAAP_PRODUCER_DMAAPTOPICNAME: /events/unauthenticated_DCAE_CL_OUTPUT
-         CONFIGS_AAI_CLIENT_AAIHOST: aai
+         CONFIGS_AAI_CLIENT_AAIHOST: aai_simulator
          CONFIGS_AAI_CLIENT_AAIPORT: 3334
          CONFIGS_AAI_CLIENT_AAIPROTOCOL: https
          CONFIGS_APPLICATION_PIPELINESPOLLINGINTERVALSEC: 20
@@ -114,3 +114,4 @@ services:
       - "3334:3334"
       - "3335:3335"
      container_name: aai_simulator
+     network_mode: bridge
