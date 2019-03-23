@@ -5,8 +5,7 @@ Documentation     Integration tests for BBS.
 Library           BbsLibrary
 Resource          resources/bbs_library.robot
 Resource          ../../common.robot
-Suite Setup       Run keywords   Create header  AND  Create sessions  AND  Set AAI Records     AND    Ensure Container Is Running  bbs  AND  Ensure Container Is Exited  ssl_bbs
-Suite Teardown    Ensure Container Is Running  ssl_bbs
+Suite Setup       Run keywords   Create header  AND  Create sessions  AND  Set AAI Records     AND    Ensure Container Is Running  bbs
 Test Teardown     Reset Simulators
 
 
