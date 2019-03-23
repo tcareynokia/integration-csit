@@ -13,7 +13,7 @@ class BbsLibrary(object):
     @staticmethod
     def check_for_log(search_for):
         client = docker.from_env()
-        container = client.containers.get('bbs-event-processor')
+        container = client.containers.get('bbs')
 
         alog = container.logs(stream=False, tail=1000)
         try:
