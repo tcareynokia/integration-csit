@@ -70,6 +70,7 @@ Invalid update event processing
     Wait Until Keyword Succeeds    5x    6000ms    Check BBS log    JSON event:
     Wait Until Keyword Succeeds    5x    6000ms    Check BBS log    ${json_obj}
 
+
 Valid update event processing
     [Arguments]    ${input_valid_event_in_dmaap}
     [Timeout]    300s

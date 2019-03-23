@@ -5,7 +5,7 @@ Documentation     Integration tests for BBS.
 Library           BbsLibrary
 Resource          resources/bbs_library.robot
 Resource          ../../common.robot
-Suite Setup       Run keywords   Create header  AND  Create sessions  AND  Set AAI Records     AND    Ensure Container Is Running  bbs
+Suite Setup       Run keywords   Create header  AND  Create sessions  AND  Set AAI Records     AND    Ensure Container Is Running    bbs
 Test Teardown     Reset Simulators
 
 
@@ -72,8 +72,9 @@ Get valid CPE_AUTHENTICATION event from DMaaP and AAI is not responding
     ${data}=    Get Data From File    ${AUTH_EVENT_WITH_ALL_VALID_REQUIRED_FIELDS}
     Ensure Container Is Exited   aai_simulator
     Set event in DMaaP    ${data}
-    Wait Until Keyword Succeeds    100x    300ms    Check BBS log    Error while retrieving PNF: Connection refused:
+    Wait Until Keyword Succeeds    100x    300ms    Check BBS log    Error while retrieving PNF: aai_simulator: Try again
     Ensure Container Is Running  aai_simulator
+    Set AAI Records
     
 Valid DMaaP PNF_UPDATE event can trigger Policy
     [Documentation]    BBS get valid PNF_UPDATE event from DMaaP with required fields - BBS triggers Policy
@@ -111,5 +112,6 @@ Get valid PNF_UPDATE event from DMaaP and AAI is not responding
     ${data}=    Get Data From File    ${UPDATE_EVENT_WITH_ALL_VALID_REQUIRED_FIELDS}
     Ensure Container Is Exited   aai_simulator
     Set event in DMaaP    ${data}
-    Wait Until Keyword Succeeds    100x    300ms    Check BBS log    Error while retrieving PNF: Connection refused:
+    Wait Until Keyword Succeeds    100x    300ms    Check BBS log    Error while retrieving PNF: aai_simulator: Try again
     Ensure Container Is Running  aai_simulator
+    Set AAI Records
