@@ -19,6 +19,7 @@ ${UPDATE_EVENT_WITH_ALL_VALID_REQUIRED_FIELDS}    %{WORKSPACE}/tests/dcaegen2/bb
 ${UPDATE_POLICY}    %{WORKSPACE}/tests/dcaegen2/bbs-testcases/assets/json_events/update_policy_with_all_fields.json
 ${AAI_PNFS}    %{WORKSPACE}/tests/dcaegen2/bbs-testcases/assets/aai_records/aai_pnfs.json
 ${AAI_SERVICES}    %{WORKSPACE}/tests/dcaegen2/bbs-testcases/assets/aai_records/aai_services.json
+${AAI_PNF_NOT_FOUND}    %{WORKSPACE}/tests/dcaegen2/bbs-testcases/assets/aai_records/aai_pnf_not_found.json
 
 *** Test Cases ***
 Valid DMaaP CPE_AUTHENTICATION event can trigger Policy

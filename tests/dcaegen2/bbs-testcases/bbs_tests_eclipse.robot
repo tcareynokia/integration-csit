@@ -28,6 +28,7 @@ ${UPDATE_NOT_JSON_FORMAT}    %{WORKSPACE}/tests/dcaegen2/bbs-testcases/assets/js
 ${UPDATE_POLICY}    %{WORKSPACE}/tests/dcaegen2/bbs-testcases/assets/json_events/update_policy_with_all_fields.json
 ${AAI_PNFS}    %{WORKSPACE}/tests/dcaegen2/bbs-testcases/assets/aai_records/aai_pnfs.json
 ${AAI_SERVICES}    %{WORKSPACE}/tests/dcaegen2/bbs-testcases/assets/aai_records/aai_services.json
+${AAI_PNF_NOT_FOUND}    %{WORKSPACE}/tests/dcaegen2/bbs-testcases/assets/aai_records/aai_pnf_not_found.json
 
 *** Test Cases ***
 Valid DMaaP CPE_AUTHENTICATION event can trigger Policy
@@ -56,7 +57,7 @@ Get valid CPE_AUTHENTICATION event from DMaaP and PNF record in AAI does not exi
     [Timeout]    30s
     ${data}=    Get Data From File    ${AUTH_EVENT_WITH_WRONG_SOURCENAME}
     Set event in DMaaP    ${data}
-    Wait Until Keyword Succeeds    5x    6000ms    Check BBS log    Error while retrieving PNF: A&AI Request for (/aai/v14/network/pnfs/pnf/Wrong-Source-Name?depth=all) failed with HTTP status code 400
+    Wait Until Keyword Succeeds    5x    6000ms    Check BBS log    Error while retrieving PNF: A&AI Request for (/aai/v14/network/pnfs/pnf/Wrong-PNF-Name?depth=all)
 
 CPE_AUTHENTICATION Event in DMaaP is not JSON format
     [Documentation]    BBS CPE_AUTHENTICATION not JSON format event from DMaaP - BBS does not Trigger Policy
@@ -74,6 +75,7 @@ Get valid CPE_AUTHENTICATION event from DMaaP and AAI is not responding
     Set event in DMaaP    ${data}
     Wait Until Keyword Succeeds    100x    300ms    Check BBS log    Error while retrieving PNF: aai_simulator: Try again
     Ensure Container Is Running  aai_simulator
+    Set AAI Records
     
 Valid DMaaP PNF_UPDATE event can trigger Policy
     [Documentation]    BBS get valid PNF_UPDATE event from DMaaP with required fields - BBS triggers Policy
@@ -94,7 +96,7 @@ Get valid PNF_UPDATE event from DMaaP and PNF record in AAI does not exist
     [Timeout]    30s
     ${data}=    Get Data From File    ${UPDATE_EVENT_WITH_WRONG_CORRELATION}
     Set event in DMaaP    ${data}
-    Wait Until Keyword Succeeds    5x    6000ms    Check BBS log    Error while retrieving PNF: A&AI Request for (/aai/v14/network/pnfs/pnf/Wrong-Correlation-Id?depth=all) failed with HTTP status code 400
+    Wait Until Keyword Succeeds    5x    6000ms    Check BBS log    Error while retrieving PNF: A&AI Request for (/aai/v14/network/pnfs/pnf/Wrong-Correlation-Id?depth=all)
 
 
 PNF_UPDATE Event in DMaaP is not JSON format
@@ -113,3 +115,4 @@ Get valid PNF_UPDATE event from DMaaP and AAI is not responding
     Set event in DMaaP    ${data}
     Wait Until Keyword Succeeds    100x    300ms    Check BBS log    Error while retrieving PNF: aai_simulator: Try again
     Ensure Container Is Running  aai_simulator
+    Set AAI Records

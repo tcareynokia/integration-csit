@@ -7,7 +7,7 @@
             "eventId": "ab305d54-85b4-a31b-7db2fb6b9e546015",
             "eventType": "applicationNf",
             "sourceId": "",
-            "sourceName": "Wrong-Source-Name",
+            "sourceName": "Wrong-PNF-Name",
             "reportingEntityId": "",
             "reportingEntityName": "thirdparty-sdnc-idfromesrrequest",
             "priority": "Normal",

@@ -29,6 +29,10 @@ Set AAI Records
     ${headers}=    Create Dictionary    Accept=application/json    Content-Type=text/html
     ${resp} =    Put Request    ${aai_setup_session}    /set_services    headers=${headers}    data=${data}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${data}=    Get Data From File    ${AAI_PNF_NOT_FOUND}
+    ${headers}=    Create Dictionary    Accept=application/json    Content-Type=text/html
+    ${resp} =    Put Request    ${aai_setup_session}    /set_pnf_not_found    headers=${headers}    data=${data}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 Invalid rgmac auth event processing
     [Arguments]    ${input_invalid_event_in_dmaap}
