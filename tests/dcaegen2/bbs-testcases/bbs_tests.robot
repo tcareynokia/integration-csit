@@ -2,7 +2,7 @@
 Documentation     Integration tests for BBS.
 ...               BBS receives CPE_AUTHENTICATION event from DMaaP and triggers a Policy that updates the CFS service with the PNF.
 ...               BBS receives PNF_UPDATE event from DMaaP and triggers a Policy that updates the CFS service resources associated with the PNF.
-Library           BbsLibrary
+
 Resource          resources/bbs_library.robot
 Resource          ../../common.robot
 Suite Setup       Run keywords   Create header  AND  Create sessions  AND  Set AAI Records     AND    Ensure Container Is Running    bbs

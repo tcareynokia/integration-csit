@@ -12,6 +12,7 @@ cd ${WORKSPACE}/tests/dcaegen2/bbs-testcases/resources/
 pip uninstall -y docker-py
 pip uninstall -y docker
 pip install -U docker==2.7.0
+
 docker-compose up -d --build
 
 BBS_IP=$(docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ${BBS_SERVICE})
@@ -31,8 +32,8 @@ echo AAI_SIMULATOR_IP=${AAI_SIMULATOR_IP}
 
 # Wait for initialization of BBS services
 # Same ports in the testcases docker compose
-wait_for_service_init localhost:8100/heartbeat
-wait_for_service_init localhost:8200/heartbeat
+wait_for_service_init localhost:32100/heartbeat
+# wait_for_service_init localhost:8200/heartbeat
 
 # #Pass any variables required by Robot test suites in ROBOT_VARIABLES
 ROBOT_VARIABLES="-v DMAAP_SIMULATOR_SETUP:${DMAAP_SIMULATOR_IP}:2224 -v AAI_SIMULATOR_SETUP:${AAI_SIMULATOR_IP}:3335"

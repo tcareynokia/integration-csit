@@ -2,6 +2,8 @@ import json
 
 import docker
 import time
+from collections import OrderedDict
+
 from docker.utils.json_stream import json_stream
 
 
@@ -37,8 +39,9 @@ class BbsLibrary(object):
     def get_invalid_auth_elements(json_file):
         """
         Get the correlationId, oldState, newState, stateInterface, macAddress, swVersion elements
-        from the invalid message and place the elements into a JSON object (string) as fields for comparision
+        from the invalid message and place the elements into a JSON object (string) as fields for comparison
         """
+
         json_to_python = json.loads(json_file)
         correlation_id = json_to_python.get("event").get("commonEventHeader").get("sourceName")
         oldState = json_to_python.get("event").get("stateChangeFields").get("oldState")
@@ -49,7 +52,7 @@ class BbsLibrary(object):
         if swVersion is None:
             swVersion = ""
         
-        inv_fields = dict()
+        inv_fields = OrderedDict()
         inv_fields['correlationId'] = correlation_id
         inv_fields['oldState'] = oldState
         inv_fields['newState'] = newState
@@ -77,7 +80,7 @@ class BbsLibrary(object):
         cvlan = json_to_python.get("additionalFields").get("cvlan")
         svlan = json_to_python.get("additionalFields").get("svlan")
         
-        inv_fields = dict()
+        inv_fields = OrderedDict()
         inv_fields['correlationId'] = correlation_id
         inv_fields['attachment-point'] = attachmentPoint
         inv_fields['remote-id'] = remoteId

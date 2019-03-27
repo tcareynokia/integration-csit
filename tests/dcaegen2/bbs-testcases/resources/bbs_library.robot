@@ -44,12 +44,13 @@ Invalid rgmac auth event processing
 
 Invalid auth event processing
     [Arguments]    ${input_invalid_event_in_dmaap}
-    [Timeout]    300s
+    [Timeout]    30s
     ${data}=    Get Data From File    ${input_invalid_event_in_dmaap}
     Set event in DMaaP    ${data}
-    ${json_obj}=    Get invalid auth elements    ${data}   
-    Wait Until Keyword Succeeds    5x    6000ms    Check BBS log    Incorrect CPE Authentication JSON event:
-    Wait Until Keyword Succeeds    5x    6000ms    Check BBS log    ${json_obj}
+    ${json_obj}=    Get invalid auth elements    ${data}
+    Wait Until Keyword Succeeds    100x  300ms    Check BBS log    Incorrect CPE Authentication JSON event:
+    Wait Until Keyword Succeeds    100x    300ms    Check BBS log    ${json_obj}
+
 Valid auth event processing
     [Arguments]    ${input_valid_event_in_dmaap}
     [Timeout]    30s
@@ -66,18 +67,16 @@ Check policy
  
 Invalid update event processing
     [Arguments]    ${input_invalid_event_in_dmaap}
-    [Timeout]    300s
+    [Timeout]    30
     ${data}=    Get Data From File    ${input_invalid_event_in_dmaap}
     Set event in DMaaP    ${data}
     ${json_obj}=    Get invalid update elements    ${data}
-    Wait Until Keyword Succeeds    5x    6000ms    Check BBS log    Incorrect Re-Registration
-    Wait Until Keyword Succeeds    5x    6000ms    Check BBS log    JSON event:
-    Wait Until Keyword Succeeds    5x    6000ms    Check BBS log    ${json_obj}
-
+    Wait Until Keyword Succeeds    100x    300ms    Check BBS log    Incorrect Re-Registration JSON event:
+    Wait Until Keyword Succeeds    100x    300ms    Check BBS log    ${json_obj}
 
 Valid update event processing
     [Arguments]    ${input_valid_event_in_dmaap}
-    [Timeout]    300s
+    [Timeout]    30s
     ${data}=    Get Data From File    ${input_valid_event_in_dmaap}
     Set event in DMaaP    ${data}
     Wait Until Keyword Succeeds    5x    6000ms    Check policy     ${UPDATE_POLICY}
